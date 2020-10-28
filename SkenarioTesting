@@ -1,0 +1,46 @@
+Skenario Unit Test
+
+MovieViewModelTest
+
+	Memuat Popular Movies
+	- Memastikan data popular movies tidak null
+	- Memastikan data popular moviews berjumlah sama dengan 10
+	
+	Memuat TV Series
+	- Memastikan data popular TV Series tidak null
+	- Memastikan data popular TV Series berjumlah sama dengan 10
+	
+DetailMovieViewModelTest
+
+	Mendapatkan detail movie
+	- Memastikan movie dengan ID 724989 tidak null
+	- Memastikan movie dengan ID 724989 memiliki title Hard Kill
+	
+	Mendapatkan detail TV Series
+	- Memastikan Series dengan ID 62286 tidak null
+	- Memastikan movie dengan ID 62286 memiliki title Fear the Walking Dead
+	
+Skenario Instrumental Testing
+
+	Menampilkan data Popular Movies
+	- melakukan tindakan klik pada tabLayout dengan nama MOVIES
+	- Memastikan listMovie tampil
+	- Melakukan scroll pada listMovie ke posisi terakhir
+	
+	Menampilkan data Detail Movie
+	- Memberikan tindakan klik pada data pertama di listMovie
+	- Memastikan txtDesc sudah tampil
+	- Memberikan tindakan klik pada back button
+	
+	Menampilkan data TV Series
+	- Melakukan tindakan klik pada tabLayout dengan nama TV SERIES
+	- Memastikan listTV tampil
+	- Melakukan scroll pada listTV ke posisi terakhir
+	
+	Menampilkan data Detail TV SERIES
+	- Melakukan tindakan klik pada tabLayout dengan nama TV SERIES
+	- Memberikan tindakan klik pada data pertama di listTV
+	- Memastikan txtDesc sudah tampil
+	- Memberikan tindakan klik pada back button
+	
+	

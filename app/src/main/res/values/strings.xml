@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">My Movie Reference</string>
+    <string name="tab_text_1">Movies</string>
+    <string name="tab_text_2">TV Series</string>
+    <string name="popular_movies_tv_series"><![CDATA[Popular Movies & TV Series]]></string>
+    <string name="this_is_poster_movie">this is poster movie</string>
+    <string name="user_rating">User Rating : %s %%</string>
+    <string name="see_more">See More…</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="this_is_movie_cover_image">this is movie cover image</string>
+    <string name="overview">Overview</string>
+    <string name="share">share</string>
+    <string name="production_company">Production Company</string>
+    <string name="genre">Genre</string>
+</resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/collapsing_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.MyMovieRef"
+    app:contentScrim="?attr/colorPrimaryVariant"
+    app:expandedTitleMarginEnd="64dp"
+    app:expandedTitleMarginStart="48dp"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/coverImage"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:contentDescription="@string/this_is_movie_cover_image"
+            android:minHeight="50dp"
+            android:scaleType="centerCrop"
+            app:layout_collapseMode="parallax"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
+
+        <View
+            android:id="@+id/overlayColor"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="@color/overlay_dark_30" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:layout_collapseMode="pin"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium" />
+</com.google.android.material.appbar.CollapsingToolbarLayout>
