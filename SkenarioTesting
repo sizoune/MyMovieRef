@@ -3,22 +3,40 @@ Skenario Unit Test
 MovieViewModelTest
 
 	Memuat Popular Movies
-	- Memastikan data popular movies tidak null
-	- Memastikan data popular moviews berjumlah sama dengan 10
+	- Melakukan observe pada observer dari popular movie
+	- Memanipulasi data Popularmovies pada repositories dengan data dummy
+	- Memastikan methode di repositories terpanggil
+	- Memastikan state loading terpanggil saat memuat data popular movies
+	- Memastikan data popular movies tidak null ketika response dari repositores berstatus sukses
+	- Memastikan jumlah data popular movies berjumlah 20 ketika response dari repositories berstatus sukses
 	
 	Memuat TV Series
-	- Memastikan data popular TV Series tidak null
-	- Memastikan data popular TV Series berjumlah sama dengan 10
+	- Melakukan observe pada observer dari popular TV Series
+	- Memanipulasi data Popular TV Series pada repositories dengan data dummy
+	- Memastikan methode di repositories terpanggil
+	- Memastikan state loading terpanggil saat memuat data popular TV Series
+	- Memastikan data popular TV Series tidak null ketika response dari repositores berstatus sukses
+	- Memastikan data popular TV Series berjumlah sama dengan 20 ketika response dari repositores berstatus sukses
 	
 DetailMovieViewModelTest
 
 	Mendapatkan detail movie
-	- Memastikan movie dengan ID 724989 tidak null
-	- Memastikan movie dengan ID 724989 memiliki title Hard Kill
+	- Melakukan observe pada observer dari detail movie
+	- Memanipulasi data DetailMovies pada repositories dengan data dummy
+	- Memastikan methode di repositories terpanggil
+	- Memastikan state loading terpanggil saat memuat data Detail movies
+	- Memastikan movie dengan ID 724989 tidak null ketika response dari repositores berstatus sukses
+	- Memastikan movie dengan ID 724989 memiliki title Hard Kill ketika response dari repositores berstatus sukses
 	
 	Mendapatkan detail TV Series
-	- Memastikan Series dengan ID 62286 tidak null
-	- Memastikan movie dengan ID 62286 memiliki title Fear the Walking Dead
+	- Melakukan observe pada observer dari detail TV Series
+	- Memanipulasi data DetailTVSeries pada repositories dengan data dummy
+	- Memastikan methode di repositories terpanggil
+	- Memastikan state loading terpanggil saat memuat data Detail TV Series
+	- Memastikan Series dengan ID 62286 tidak null ketika response dari repositores berstatus sukses
+	- Memastikan movie dengan ID 62286 memiliki title Fear the Walking Dead ketika response dari repositores berstatus sukses
+	
+	
 	
 Skenario Instrumental Testing
 

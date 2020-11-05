@@ -2,23 +2,29 @@ package com.wildan.mymovieref.ui.main.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.espresso.IdlingRegistry
+import com.haroldadmin.cnradapter.NetworkResponse
+import com.nhaarman.mockitokotlin2.times
 import com.wildan.mymovieref.data.model.PopularMovie
 import com.wildan.mymovieref.data.model.PopularTVSeries
-import com.wildan.mymovieref.data.remote.TheMovieDBAPI
 import com.wildan.mymovieref.data.repository.FakeRemoteRepository
 import com.wildan.mymovieref.data.repository.RemoteRepository
-import com.wildan.mymovieref.ui.MainCoroutineRule
-import com.wildan.mymovieref.utils.Constants
+import com.wildan.mymovieref.utils.EspressoIdlingResource
 import com.wildan.mymovieref.utils.Resource
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
@@ -30,15 +36,11 @@ class MovieViewModelTest {
 
     private lateinit var mainViewModel: MovieViewModel
     private var expectedListSize = 20
-
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @Mock
-    private lateinit var theMovieDBAPI: TheMovieDBAPI
 
     @Mock
     private lateinit var remoteRepository: RemoteRepository
@@ -49,32 +51,59 @@ class MovieViewModelTest {
     @Mock
     private lateinit var tvObserver: Observer<Resource<List<PopularTVSeries>>>
 
+
+
     @Before
-    fun setViewModel() {
-//        remoteRepository = RemoteRepository(theMovieDBAPI)
+    fun setUP() {
+        Dispatchers.setMain(testDispatcher)
         mainViewModel = MovieViewModel(remoteRepository)
+    }
+
+    @After
+    fun after() {
+        Dispatchers.resetMain()
+        testScope.cleanupTestCoroutines()
     }
 
     // menguji apakah list popular movie tidak null dan berjumlah 20
     @Test
-    fun getMoviePopularList() = mainCoroutineRule.runBlockingTest {
+    fun getMoviePopularList() = runBlocking {
         val dummyPopularMovie = FakeRemoteRepository.fakeSuccessPopularMoviesResponse()
-        `when`(remoteRepository.getPopularMovies(1)).thenReturn(dummyPopularMovie)
-//        Mockito.doReturn(dummyPopularMovie).`when`(remoteRepository).getPopularMovies(1)
-        verify(remoteRepository).getPopularMovies(1)
-        val popularMovies = mainViewModel.getMoviePopularList(1).value
-        assertNotNull(popularMovies)
-        assertEquals(expectedListSize, popularMovies?.data?.size)
-
         mainViewModel.getMoviePopularList(1).observeForever(moviesObserver)
-        verify(moviesObserver).onChanged(popularMovies)
+        `when`(remoteRepository.getPopularMovies(1)).thenReturn(dummyPopularMovie)
+
+        verify(remoteRepository).getPopularMovies(1)
+        verify(moviesObserver).onChanged(Resource.loading(null))
+
+        when (val data =
+            remoteRepository.getPopularMovies(
+                1
+            )) {
+            is NetworkResponse.Success -> {
+                assertNotNull(data.body)
+                assertEquals(expectedListSize, data.body.results.size)
+            }
+        }
     }
 
+
     // menguji apakah list popular TV tidak null dan berjumlah 10
-//    @Test
-//    fun getTVSeriesPopularList() {
-//        val popularSeries = mainViewModel.getTVSeriesPopularList()
-//        assertNotNull(popularSeries)
-//        assertEquals(expectedListSize, popularSeries.size)
-//    }
+    @Test
+    fun getTVSeriesPopularList() = runBlocking {
+        mainViewModel.getTVSeriesPopularList(1).observeForever(tvObserver)
+        val dummyPopularTV = FakeRemoteRepository.fakeSuccessPopularTVSeriesResponse()
+        `when`(remoteRepository.getPopularTVSeries(1)).thenReturn(dummyPopularTV)
+
+        verify(remoteRepository).getPopularTVSeries(1)
+        verify(tvObserver).onChanged(Resource.loading(null))
+        when (val data =
+            remoteRepository.getPopularTVSeries(
+                1
+            )) {
+            is NetworkResponse.Success -> {
+                assertNotNull(data.body)
+                assertEquals(expectedListSize, data.body.results.size)
+            }
+        }
+    }
 }

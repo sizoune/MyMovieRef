@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.wildan.mymovieref.data.repository.RemoteRepository
 import com.wildan.mymovieref.utils.Constants
+import com.wildan.mymovieref.utils.EspressoIdlingResource
 import com.wildan.mymovieref.utils.Resource
 import com.wildan.mymovieref.utils.errorLog
 import kotlinx.coroutines.Dispatchers
