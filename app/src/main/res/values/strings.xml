@@ -2,7 +2,7 @@
     <string name="app_name">My Movie Reference</string>
     <string name="tab_text_1">Movies</string>
     <string name="tab_text_2">TV Series</string>
-    <string name="popular_movies_tv_series"><![CDATA[Popular Movies & TV Series]]></string>
+    <string name="popular_movies_tv_series"><![CDATA[My Movie Reference]]></string>
     <string name="this_is_poster_movie">this is poster movie</string>
     <string name="user_rating">User Rating : %s %%</string>
     <string name="see_more">See More…</string>
@@ -13,4 +13,10 @@
     <string name="share">share</string>
     <string name="production_company">Production Company</string>
     <string name="genre">Genre</string>
+    <string name="movies">MOVIES</string>
+    <string name="tv_series">TV SERIES</string>
+    <string name="favorites">My Favorites</string>
+    <string name="favorite_button">favorite button</string>
+    <string name="belum_ada_data_coba_tambahkan_movie_favorite_anda_terlebih_dahulu">Belum ada data ! coba tambahkan movie favorite anda terlebih dahulu !</string>
+    <string name="belum_ada_data_coba_tambahkan_tv_favorite_anda_terlebih_dahulu">Belum ada data ! coba tambahkan tv favorite anda terlebih dahulu !</string>
 </resources>

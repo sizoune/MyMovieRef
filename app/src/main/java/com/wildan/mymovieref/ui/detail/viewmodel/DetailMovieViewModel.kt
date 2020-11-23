@@ -4,15 +4,36 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.wildan.mymovieref.data.local.FavoriteMovies
+import com.wildan.mymovieref.data.local.FavoriteTVSeries
+import com.wildan.mymovieref.data.repository.LocalRepository
 import com.wildan.mymovieref.data.repository.RemoteRepository
 import com.wildan.mymovieref.utils.Constants
-import com.wildan.mymovieref.utils.EspressoIdlingResource
 import com.wildan.mymovieref.utils.Resource
 import com.wildan.mymovieref.utils.errorLog
 import kotlinx.coroutines.Dispatchers
 
-class DetailMovieViewModel @ViewModelInject constructor(private val remoteRepository: RemoteRepository) :
+class DetailMovieViewModel @ViewModelInject constructor(
+    private val remoteRepository: RemoteRepository,
+    private val localRepository: LocalRepository
+) :
     ViewModel() {
+
+    suspend fun addFavMovie(favoriteMovies: FavoriteMovies) =
+        localRepository.addFavMovie(favoriteMovies)
+
+    suspend fun addFavTV(favoriteTVSeries: FavoriteTVSeries) =
+        localRepository.addFavSeries(favoriteTVSeries)
+
+    suspend fun deleteFavMovie(favoriteMovies: FavoriteMovies) =
+        localRepository.deleteFavMovie(favoriteMovies)
+
+    suspend fun deleteFavTV(favoriteTVSeries: FavoriteTVSeries) =
+        localRepository.deleteFavSeries(favoriteTVSeries)
+
+    fun checkFavMovie(movieId: Int) = localRepository.isInFavMovie(movieId)
+
+    fun checkFavTV(tvID: Int) = localRepository.isInFavSeries(tvID)
 
     fun getDetailMovie(movieId: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))

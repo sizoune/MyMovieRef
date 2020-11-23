@@ -13,13 +13,17 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_text_2
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
+@Suppress("DEPRECATION")
+class SectionsPagerAdapter(
+    private val context: Context, fm: FragmentManager,
+    private val isFavorite: Boolean
+) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> MovieFragment.newInstance()
-            else -> TVSeriesFragment.newInstance()
+            0 -> MovieFragment.newInstance(isFavorite)
+            else -> TVSeriesFragment.newInstance(isFavorite)
         }
     }
 
@@ -29,6 +33,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getCount(): Int {
         // Show 2 total pages.
-        return 2
+        return TAB_TITLES.size
     }
 }
