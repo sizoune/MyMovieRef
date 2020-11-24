@@ -1,6 +1,7 @@
 package com.wildan.mymovieref.data.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 
 @Dao
@@ -19,10 +20,10 @@ interface FavoriteDao {
     suspend fun deleteTV(favTV: FavoriteTVSeries)
 
     @Query("SELECT * from FavoriteMovies")
-    fun getFavMovies(): LiveData<List<FavoriteMovies>>
+    fun getFavMovies(): DataSource.Factory<Int, FavoriteMovies>
 
     @Query("SELECT * from FavoriteTVSeries")
-    fun getFavSeries(): LiveData<List<FavoriteTVSeries>>
+    fun getFavSeries(): DataSource.Factory<Int, FavoriteTVSeries>
 
     @Query("SELECT * from FavoriteMovies WHERE id=:movieID")
     fun isInFavMovie(movieID: Int): LiveData<FavoriteMovies>

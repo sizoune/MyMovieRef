@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.wildan.mymovieref.data.local.FavoriteMovies
 import com.wildan.mymovieref.data.model.PopularMovie
@@ -22,13 +23,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieFragment : Fragment() {
 
     private val pageViewModel: MovieViewModel by viewModels()
+    private lateinit var adapterFavorite: FavoriteMovieAdapter
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,22 +53,24 @@ class MovieFragment : Fragment() {
     private fun loadFavoriteMovies() {
 
         showLoading(true)
-        pageViewModel.getFavoriteMovies().observe(viewLifecycleOwner) { data ->
-            println("data ada ? $data")
-            showLoading(false)
-            if (data != null) {
-                if (data.isNotEmpty()) {
-                    binding.txtEmpty.hide()
-                    setDataIntoListFavorite(data)
+        pageViewModel.getFavoriteMovies().observe(viewLifecycleOwner,
+            { data ->
+                println("data ada ? $data")
+                showLoading(false)
+                if (data != null) {
+                    if (data.isNotEmpty()) {
+                        binding.txtEmpty.hide()
+                        setDataIntoListFavorite(data)
+                    } else {
+                        binding.listMovie.hide()
+                        binding.txtEmpty.show()
+                    }
                 } else {
                     binding.listMovie.hide()
                     binding.txtEmpty.show()
                 }
-            } else {
-                binding.listMovie.hide()
-                binding.txtEmpty.show()
             }
-        }
+        )
     }
 
     private fun setupObserver() {
@@ -99,17 +103,19 @@ class MovieFragment : Fragment() {
         })
     }
 
-    private fun setDataIntoListFavorite(data: List<FavoriteMovies>) {
+    private fun setDataIntoListFavorite(data: PagedList<FavoriteMovies>) {
+        adapterFavorite = FavoriteMovieAdapter {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(Constants.DATA, it)
+            intent.putExtra(Constants.CATEGORY, Constants.MOVIE)
+            startActivity(intent)
+        }
         binding.listMovie.apply {
             layoutManager = GridLayoutManager(context, 3)
             addItemDecoration(ListSpacingDecoration(3, 8, true, 0))
-            adapter = FavoriteMovieAdapter(data) {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(Constants.DATA, it)
-                intent.putExtra(Constants.CATEGORY, Constants.MOVIE)
-                startActivity(intent)
-            }
+            adapter = adapterFavorite
         }
+        adapterFavorite.submitList(data)
     }
 
     private fun setDataIntoList(data: List<PopularMovie>) {

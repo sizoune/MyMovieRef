@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.wildan.mymovieref.data.local.FavoriteTVSeries
 import com.wildan.mymovieref.data.model.PopularTVSeries
@@ -24,11 +25,12 @@ class TVSeriesFragment : Fragment() {
     private val pageViewModel: MovieViewModel by viewModels()
     private var _binding: FragmentTVSeriesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapterFavorite: FavoriteTVAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTVSeriesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -66,17 +68,19 @@ class TVSeriesFragment : Fragment() {
         }
     }
 
-    private fun setDataIntoListFavorite(data: List<FavoriteTVSeries>) {
+    private fun setDataIntoListFavorite(data: PagedList<FavoriteTVSeries>) {
+        adapterFavorite = FavoriteTVAdapter {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(Constants.DATA, it)
+            intent.putExtra(Constants.CATEGORY, Constants.TV_SERIES)
+            startActivity(intent)
+        }
         binding.listTV.apply {
             layoutManager = GridLayoutManager(context, 3)
             addItemDecoration(ListSpacingDecoration(3, 8, true, 0))
-            adapter = FavoriteTVAdapter(data) {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(Constants.DATA, it)
-                intent.putExtra(Constants.CATEGORY, Constants.TV_SERIES)
-                startActivity(intent)
-            }
+            adapter = adapterFavorite
         }
+        adapterFavorite.submitList(data)
     }
 
     private fun setupObserver() {

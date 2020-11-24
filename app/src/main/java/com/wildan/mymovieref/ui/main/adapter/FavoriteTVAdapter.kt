@@ -1,9 +1,12 @@
 package com.wildan.mymovieref.ui.main.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -14,9 +17,8 @@ import com.wildan.mymovieref.databinding.ItemListBinding
 import com.wildan.mymovieref.utils.Constants
 
 class FavoriteTVAdapter(
-    private val movies: List<FavoriteTVSeries>,
     private val clickListener: (Int) -> Unit
-) : RecyclerView.Adapter<FavoriteTVAdapter.MovieHolder>() {
+) : PagedListAdapter<FavoriteTVSeries, FavoriteTVAdapter.MovieHolder>(DIFF_CALLBACK) {
 
     class MovieHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
         fun bindItemtoView(
@@ -56,8 +58,26 @@ class FavoriteTVAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.bindItemtoView(movies[position], clickListener)
+        getItem(position)?.let { holder.bindItemtoView(it, clickListener) }
     }
 
-    override fun getItemCount(): Int = movies.size
+    companion object {
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<FavoriteTVSeries> =
+            object : DiffUtil.ItemCallback<FavoriteTVSeries>() {
+                override fun areItemsTheSame(
+                    oldFav: FavoriteTVSeries,
+                    newFav: FavoriteTVSeries
+                ): Boolean {
+                    return oldFav.id == newFav.id
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(
+                    oldFav: FavoriteTVSeries,
+                    newFav: FavoriteTVSeries
+                ): Boolean {
+                    return oldFav == newFav
+                }
+            }
+    }
 }

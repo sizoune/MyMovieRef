@@ -1,9 +1,12 @@
 package com.wildan.mymovieref.ui.main.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -14,9 +17,8 @@ import com.wildan.mymovieref.databinding.ItemListBinding
 import com.wildan.mymovieref.utils.Constants
 
 class FavoriteMovieAdapter(
-    private val movies: List<FavoriteMovies>,
     private val clickListener: (Int) -> Unit
-) : RecyclerView.Adapter<FavoriteMovieAdapter.MovieHolder>() {
+) : PagedListAdapter<FavoriteMovies, FavoriteMovieAdapter.MovieHolder>(DIFF_CALLBACK) {
 
     class MovieHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
         fun bindItemtoView(
@@ -56,8 +58,26 @@ class FavoriteMovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.bindItemtoView(movies[position], clickListener)
+        getItem(position)?.let { holder.bindItemtoView(it, clickListener) }
     }
 
-    override fun getItemCount(): Int = movies.size
+    companion object {
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<FavoriteMovies> =
+            object : DiffUtil.ItemCallback<FavoriteMovies>() {
+                override fun areItemsTheSame(
+                    oldFav: FavoriteMovies,
+                    newFav: FavoriteMovies
+                ): Boolean {
+                    return oldFav.id == newFav.id
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(
+                    oldFav: FavoriteMovies,
+                    newFav: FavoriteMovies
+                ): Boolean {
+                    return oldFav == newFav
+                }
+            }
+    }
 }
