@@ -18,6 +18,24 @@ MovieViewModelTest
 	- Memastikan data popular TV Series tidak null ketika response dari repositores berstatus sukses
 	- Memastikan data popular TV Series berjumlah sama dengan 20 ketika response dari repositores berstatus sukses
 	
+	Memuat Favorit Movies
+	- Membuat data dummy favorite movies
+	- Memanupulasi data dari favorite movie dengan data dummy
+	- Melakukan observe pada observer dari FavoriteMoviesObserver
+	- Memastikan metode di repositories terpanggil
+	- Memastikan data FavoriteMovies tidak sama dengan null
+	- Memastikan data dari favorite movies berjumlah sama dengan 5
+	- memastikan terjadi perubahan data Favorite movies di dalam observer favorite movies
+	
+	Memuat Favorit TV Series
+	- Membuat data dummy favorite TV Series
+	- Memanupulasi data dari favorite TV Series dengan data dummy
+	- Melakukan observe pada observer dari FavoriteTVSeriesObserver
+	- Memastikan metode di repositories terpanggil
+	- Memastikan data FavoriteTVSeries tidak sama dengan null
+	- Memastikan data dari favorite TV Series berjumlah sama dengan 5
+	- memastikan terjadi perubahan data Favorite TV Series di dalam observer favorite TV Series
+	
 DetailMovieViewModelTest
 
 	Mendapatkan detail movie
@@ -36,6 +54,34 @@ DetailMovieViewModelTest
 	- Memastikan Series dengan ID 62286 tidak null ketika response dari repositores berstatus sukses
 	- Memastikan movie dengan ID 62286 memiliki title Fear the Walking Dead ketika response dari repositores berstatus sukses
 	
+	
+	(Pengujian ini terdapat pada class Favorite di package androidTest karena pengujian Room membutuhkan android device)
+	
+	Pengujian insert data Favorite Movies
+	- Membuat data dummy favorite movies
+	- Insert semua data favorite movies ke database
+	- Mengambil data favorite movie dari dalam database dengan id yang sama dengan data ke 0 dari data dummy
+	- Memastikan data Favorite Movie yang diambil dari database tidak sama dengan null
+	
+	Pengujian insert data Favorite TV Series
+	- Membuat data dummy favorite TV Series
+	- Insert semua data favorite TV Series ke database
+	- Mengambil data favorite TV Series dari dalam database dengan id yang sama dengan data ke 0 dari data dummy
+	- Memastikan data TV Series yang diambil dari database tidak sama dengan null
+	
+	Pengujian delete data Favorite Movies
+	- Membuat data dummy favorite movie
+	- Insert semua data favorite movies ke database
+	- Hapus data dummy ke 0 di dalam database
+	- Mengambil semua data favorite movies dari database
+	- Memastikan bahwa data favorite movies dari database tidak mengandung data dummy ke 0
+	
+	Pengujian delete data Favorite TV Series
+	- Membuat data dummy favorite TV Series
+	- Insert semua data favorite TV Series ke database
+	- Hapus data dummy ke 0 di dalam database
+	- Mengambil semua data favorite TV Series dari database
+	- Memastikan bahwa data favorite TV Series dari database tidak mengandung data dummy ke 0
 	
 	
 Skenario Instrumental Testing
@@ -60,5 +106,36 @@ Skenario Instrumental Testing
 	- Memberikan tindakan klik pada data pertama di listTV
 	- Memastikan txtDesc sudah tampil
 	- Memberikan tindakan klik pada back button
+	
+	Menampilkan data favorit Movies
+	- Melakukan tindakan klik pada tabLayout dengan nama MOVIES
+	- Memberikan tindakan klik pada data pertama di listMovie
+	- Melakukan tindakan klik pada view dengan id myFav
+	- Memberikan tindakan klik pada back button
+	- Memberikan tindakan klik pada view dengan id myFav
+	- Memastikan listMovie ditampilkan
+	
+	Menampilkan data favorit TV Series
+	- Melakukan tindakan klik pada tabLayout dengan nama TV Series
+	- Memberikan tindakan klik pada data pertama di listTV
+	- Melakukan tindakan klik pada view dengan id myFav
+	- Memberikan tindakan klik pada back button
+	- Memberikan tindakan klik pada view dengan id myFav
+	- Melakukan tindakan klik pada tabLayout dengan nama TV Series
+	- Memastikan listTV ditampilkan
+	
+	Menampilkan data Detail Favorite Movie
+	- Melakukan tindakan klik pada view dengan id myFav
+	- Memberikan tindakan klik pada data pertama di listMovie
+	- Memastikan txtDesc sudah tampil
+	- Memberikan tindakan klik pada back button
+	
+	Menampilkan data Detail Favorite TV Series
+	- Melakukan tindakan klik pada view dengan id myFav
+	- Melakukan tindakan klik pada tabLayout dengan nama TV Series
+	- Memberikan tindakan klik pada data pertama di listTV
+	- Memastikan txtDesc sudah tampil
+	- Memberikan tindakan klik pada back button
+	
 	
 	

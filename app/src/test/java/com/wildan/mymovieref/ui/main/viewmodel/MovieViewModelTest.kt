@@ -2,14 +2,18 @@ package com.wildan.mymovieref.ui.main.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.test.espresso.IdlingRegistry
+import androidx.paging.PagedList
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.nhaarman.mockitokotlin2.times
+import com.wildan.mymovieref.data.local.FavoriteMovies
+import com.wildan.mymovieref.data.local.FavoriteTVSeries
 import com.wildan.mymovieref.data.model.PopularMovie
 import com.wildan.mymovieref.data.model.PopularTVSeries
+import com.wildan.mymovieref.data.repository.FakeLocalRepository
 import com.wildan.mymovieref.data.repository.FakeRemoteRepository
+import com.wildan.mymovieref.data.repository.LocalRepository
 import com.wildan.mymovieref.data.repository.RemoteRepository
-import com.wildan.mymovieref.utils.EspressoIdlingResource
+import com.wildan.mymovieref.util.asPagedList
+import com.wildan.mymovieref.util.getOrAwaitValue
 import com.wildan.mymovieref.utils.Resource
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
@@ -36,6 +40,7 @@ class MovieViewModelTest {
 
     private lateinit var mainViewModel: MovieViewModel
     private var expectedListSize = 20
+    private var expectedFavoriteSize = 5
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
@@ -46,17 +51,24 @@ class MovieViewModelTest {
     private lateinit var remoteRepository: RemoteRepository
 
     @Mock
+    private lateinit var localRepository: LocalRepository
+
+    @Mock
     private lateinit var moviesObserver: Observer<Resource<List<PopularMovie>>>
 
     @Mock
     private lateinit var tvObserver: Observer<Resource<List<PopularTVSeries>>>
 
+    @Mock
+    private lateinit var favMovieObserver: Observer<PagedList<FavoriteMovies>>
 
+    @Mock
+    private lateinit var favTVObserver: Observer<PagedList<FavoriteTVSeries>>
 
     @Before
     fun setUP() {
         Dispatchers.setMain(testDispatcher)
-        mainViewModel = MovieViewModel(remoteRepository)
+        mainViewModel = MovieViewModel(remoteRepository, localRepository)
     }
 
     @After
@@ -105,5 +117,37 @@ class MovieViewModelTest {
                 assertEquals(expectedListSize, data.body.results.size)
             }
         }
+    }
+
+    //menguji apakah list favorite movie tidak null dan berjumlah 5
+    @Test
+    fun getFavoriteMovies() {
+        val favMovies = FakeLocalRepository.loadFavoriteMovies().asPagedList().getOrAwaitValue()
+        `when`(localRepository.getFavoriteMovies()).thenReturn(
+            FakeLocalRepository.loadFavoriteMovies().asPagedList()
+        )
+        mainViewModel.getFavoriteMovies().observeForever(favMovieObserver)
+
+        verify(localRepository).getFavoriteMovies()
+        assertNotNull(favMovies)
+        assertEquals(expectedFavoriteSize, favMovies.size)
+
+        verify(favMovieObserver).onChanged(favMovies)
+    }
+
+    //menguji apakah list favorite TV tidak null dan berjumlah 5
+    @Test
+    fun getFavoriteTV() {
+        val favTV = FakeLocalRepository.loadFavoriteTV().asPagedList().getOrAwaitValue()
+        `when`(localRepository.getFavoriteTVSeries()).thenReturn(
+            FakeLocalRepository.loadFavoriteTV().asPagedList()
+        )
+        mainViewModel.getFavoriteTVSeries().observeForever(favTVObserver)
+
+        verify(localRepository).getFavoriteTVSeries()
+        assertNotNull(favTV)
+        assertEquals(expectedFavoriteSize, favTV.size)
+
+        verify(favTVObserver).onChanged(favTV)
     }
 }

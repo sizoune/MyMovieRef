@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wildan.mymovieref.data.model.DetailMovie
 import com.wildan.mymovieref.data.model.DetailTVSeries
 import com.wildan.mymovieref.data.repository.FakeRemoteRepository
+import com.wildan.mymovieref.data.repository.LocalRepository
 import com.wildan.mymovieref.data.repository.RemoteRepository
 import com.wildan.mymovieref.utils.Resource
 import junit.framework.TestCase
@@ -25,6 +26,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
+import java.io.IOException
 
 @RunWith(MockitoJUnitRunner::class)
 @ExperimentalCoroutinesApi
@@ -46,6 +48,9 @@ class DetailMovieViewModelTest {
     private lateinit var remoteRepository: RemoteRepository
 
     @Mock
+    private lateinit var localRepository: LocalRepository
+
+    @Mock
     private lateinit var moviesObserver: Observer<Resource<DetailMovie>>
 
     @Mock
@@ -54,10 +59,11 @@ class DetailMovieViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        detailViewModel = DetailMovieViewModel(remoteRepository)
+        detailViewModel = DetailMovieViewModel(remoteRepository, localRepository)
     }
 
     @After
+    @Throws(IOException::class)
     fun after() {
         Dispatchers.resetMain()
         testScope.cleanupTestCoroutines()

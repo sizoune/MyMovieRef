@@ -90,4 +90,64 @@ class MainActivityTest {
         onView(withId(R.id.txtDesc)).check(matches(isDisplayed()))
         Espresso.pressBack()
     }
+
+    @Test
+    fun loadFavoritesMovies(){
+        onView(withText("MOVIES")).perform(click())
+        onView(withId(R.id.listMovie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+        onView(withId(R.id.btnFavorite)).perform(click())
+        Espresso.pressBack()
+        onView(withId(R.id.myFav)).perform(click())
+        onView(withId(R.id.listMovie)).check(matches(isDisplayed()))
+        Espresso.pressBack()
+    }
+
+    @Test
+    fun loadDetailFavMovie(){
+        onView(withId(R.id.myFav)).perform(click())
+        onView(withId(R.id.listMovie)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+        onView(withId(R.id.txtDesc)).check(matches(isDisplayed()))
+        Espresso.pressBack()
+    }
+
+    @Test
+    fun loadFavoritesTV(){
+        onView(withText("TV SERIES")).perform(click())
+        onView(withId(R.id.listTV)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+        onView(withId(R.id.btnFavorite)).perform(click())
+        Espresso.pressBack()
+        onView(withId(R.id.myFav)).perform(click())
+        onView(withText("TV SERIES")).perform(click())
+        onView(withId(R.id.listTV)).check(matches(isDisplayed()))
+        Espresso.pressBack()
+    }
+
+    @Test
+    fun loadFavoritesTVDetail(){
+        onView(withId(R.id.myFav)).perform(click())
+        onView(withText("TV SERIES")).perform(click())
+        onView(withId(R.id.listTV)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+        onView(withId(R.id.txtDesc)).check(matches(isDisplayed()))
+        Espresso.pressBack()
+    }
 }

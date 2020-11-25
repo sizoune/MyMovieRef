@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.wildan.mymovieref.data.local.FavoriteMovies
@@ -23,10 +22,10 @@ class MovieViewModel @ViewModelInject constructor(
     ViewModel() {
 
     fun getFavoriteMovies(): LiveData<PagedList<FavoriteMovies>> =
-        LivePagedListBuilder(localRepository.getFavoriteMovies(), 10).build()
+        localRepository.getFavoriteMovies()
 
     fun getFavoriteTVSeries(): LiveData<PagedList<FavoriteTVSeries>> =
-        LivePagedListBuilder(localRepository.getFavoriteTVSeries(), 10).build()
+        localRepository.getFavoriteTVSeries()
 
     fun getMoviePopularList(page: Int) = liveData(Dispatchers.IO) {
         //for testing
