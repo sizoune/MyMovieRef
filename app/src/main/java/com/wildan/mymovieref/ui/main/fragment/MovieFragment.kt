@@ -9,14 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
-import com.wildan.mymovieref.data.local.FavoriteMovies
-import com.wildan.mymovieref.data.model.PopularMovie
 import com.wildan.mymovieref.databinding.FragmentMovieBinding
+import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
+import com.wildan.mymovieref.core.domain.model.PopularMovie
 import com.wildan.mymovieref.ui.detail.DetailActivity
-import com.wildan.mymovieref.ui.main.adapter.FavoriteMovieAdapter
-import com.wildan.mymovieref.ui.main.adapter.MovieAdapter
+import com.wildan.mymovieref.core.ui.FavoriteMovieAdapter
+import com.wildan.mymovieref.core.ui.MovieAdapter
 import com.wildan.mymovieref.ui.main.viewmodel.MovieViewModel
-import com.wildan.mymovieref.utils.*
+import com.wildan.mymovieref.core.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -103,7 +103,7 @@ class MovieFragment : Fragment() {
         })
     }
 
-    private fun setDataIntoListFavorite(data: PagedList<FavoriteMovies>) {
+    private fun setDataIntoListFavorite(data: PagedList<DetailPopularMovie>) {
         adapterFavorite = FavoriteMovieAdapter {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(Constants.DATA, it)

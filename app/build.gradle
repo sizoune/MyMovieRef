@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
+
+apply from: '../shared_dependencies.gradle'
 
 android {
     compileSdkVersion 29
@@ -40,70 +42,9 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    dynamicFeatures = [':favorite']
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
-    implementation 'androidx.fragment:fragment-ktx:1.2.5'
-
-    //3rd Libs
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation "com.github.haroldadmin:NetworkResponseAdapter:4.0.1"
-
-    //Retrofit and other dependencies
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
-
-    //Room
-    implementation 'androidx.room:room-runtime:2.2.5'
-    implementation 'androidx.room:room-ktx:2.2.5'
-    kapt 'androidx.room:room-compiler:2.2.5'
-    androidTestImplementation 'androidx.room:room-testing:2.2.5'
-
-    //Paging
-    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
-
-    //DI with Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    // Hilt ViewModel extension
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_jetpack_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
-    // Hilt testing dependencies
-    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
-    kaptAndroidTest "androidx.hilt:hilt-compiler:$hilt_jetpack_version"
-
-    //Testing
-    implementation "androidx.test.espresso:espresso-idling-resource:$idleResourceVersion"
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
-    testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5"
-    testImplementation 'org.mockito:mockito-inline:2.13.0'
-    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
-    testImplementation "io.mockk:mockk:1.10.0"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
-    androidTestImplementation "androidx.test:rules:1.3.0"
-    androidTestImplementation 'androidx.test:core:1.3.0'
-    androidTestImplementation "com.google.truth:truth:1.0.1"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5"
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    implementation project(":core")
 }

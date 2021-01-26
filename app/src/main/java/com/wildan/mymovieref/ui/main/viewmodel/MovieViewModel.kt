@@ -6,32 +6,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.wildan.mymovieref.data.local.FavoriteMovies
-import com.wildan.mymovieref.data.local.FavoriteTVSeries
-import com.wildan.mymovieref.data.repository.LocalRepository
-import com.wildan.mymovieref.data.repository.RemoteRepository
-import com.wildan.mymovieref.utils.Constants
-import com.wildan.mymovieref.utils.Resource
-import com.wildan.mymovieref.utils.errorLog
+import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
+import com.wildan.mymovieref.core.domain.model.DetailPopularTVSeries
+import com.wildan.mymovieref.core.domain.usecase.PopularUseCase
+import com.wildan.mymovieref.core.utils.Constants
+import com.wildan.mymovieref.core.utils.Resource
+import com.wildan.mymovieref.core.utils.errorLog
 import kotlinx.coroutines.Dispatchers
 
 class MovieViewModel @ViewModelInject constructor(
-    private val remoteRepository: RemoteRepository,
-    private val localRepository: LocalRepository
+    private val popularUseCase: PopularUseCase
 ) :
     ViewModel() {
 
-    fun getFavoriteMovies(): LiveData<PagedList<FavoriteMovies>> =
-        localRepository.getFavoriteMovies()
+    fun getFavoriteMovies(): LiveData<PagedList<DetailPopularMovie>> =
+        popularUseCase.getFavoriteMovies()
 
-    fun getFavoriteTVSeries(): LiveData<PagedList<FavoriteTVSeries>> =
-        localRepository.getFavoriteTVSeries()
+    fun getFavoriteTVSeries(): LiveData<PagedList<DetailPopularTVSeries>> =
+        popularUseCase.getFavoriteTVSeries()
 
     fun getMoviePopularList(page: Int) = liveData(Dispatchers.IO) {
         //for testing
         emit(Resource.loading(data = null))
         when (val data =
-            remoteRepository.getPopularMovies(
+            popularUseCase.getPopularMovies(
                 page
             )) {
             is NetworkResponse.Success -> {
@@ -71,7 +69,7 @@ class MovieViewModel @ViewModelInject constructor(
     fun getTVSeriesPopularList(page: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         when (val data =
-            remoteRepository.getPopularTVSeries(
+            popularUseCase.getPopularTVSeries(
                 page
             )) {
             is NetworkResponse.Success -> {

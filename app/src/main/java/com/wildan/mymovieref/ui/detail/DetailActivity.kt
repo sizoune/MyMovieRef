@@ -16,16 +16,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wildan.mymovieref.R
-import com.wildan.mymovieref.data.local.FavoriteMovies
-import com.wildan.mymovieref.data.local.FavoriteTVSeries
-import com.wildan.mymovieref.data.model.DetailMovie
-import com.wildan.mymovieref.data.model.DetailTVSeries
 import com.wildan.mymovieref.databinding.ActivityDetailBinding
-import com.wildan.mymovieref.ui.detail.adapter.GenreAdapter
+import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
+import com.wildan.mymovieref.core.domain.model.DetailPopularTVSeries
+import com.wildan.mymovieref.core.ui.GenreAdapter
 import com.wildan.mymovieref.ui.detail.viewmodel.DetailMovieViewModel
-import com.wildan.mymovieref.utils.*
+import com.wildan.mymovieref.core.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,10 +33,10 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var binding: ActivityDetailBinding
     private val viewModel: DetailMovieViewModel by viewModels()
-    private lateinit var detailMovie: DetailMovie
-    private lateinit var detailTV: DetailTVSeries
-    private lateinit var favMovie: FavoriteMovies
-    private lateinit var favTV: FavoriteTVSeries
+    private lateinit var detailMovieResponse: DetailPopularMovie
+    private lateinit var detailTVResponse: DetailPopularTVSeries
+    private lateinit var favMovie: DetailPopularMovie
+    private lateinit var favTV: DetailPopularTVSeries
     private lateinit var myShareActionProvider: ShareActionProvider
     private var category: String? = null
     private var isFavorite = false
@@ -86,7 +83,7 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
         category?.let { category ->
             val id = intent.getIntExtra(Constants.DATA, -1)
             checkFavState(id, category)
-            btnFavorite.setOnClickListener {
+            binding.btnFavorite.setOnClickListener {
                 if (!isFavorite) {
                     // add to favorite
                     addToFav(id, category)
@@ -101,25 +98,25 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
     private fun addToFav(id: Int, category: String) {
         launch {
             if (category == Constants.MOVIE) {
-                val favMovie = FavoriteMovies(
+                val favMovie = DetailPopularMovie(
                     id,
-                    detailMovie.backdropPath,
-                    detailMovie.posterPath,
-                    detailMovie.originalTitle,
-                    detailMovie.releaseDate,
-                    detailMovie.overview,
-                    detailMovie.genres
+                    detailMovieResponse.backdropPath,
+                    detailMovieResponse.posterPath,
+                    detailMovieResponse.originalTitle,
+                    detailMovieResponse.releaseDate,
+                    detailMovieResponse.overview,
+                    detailMovieResponse.genres
                 )
                 viewModel.addFavMovie(favMovie)
             } else if (category == Constants.TV_SERIES) {
-                val favTV = FavoriteTVSeries(
+                val favTV = DetailPopularTVSeries(
                     id,
-                    detailTV.backdropPath,
-                    detailTV.posterPath,
-                    detailTV.originalName,
-                    detailTV.firstAirDate,
-                    detailTV.overview,
-                    detailTV.genres
+                    detailTVResponse.backdropPath,
+                    detailTVResponse.posterPath,
+                    detailTVResponse.originalName,
+                    detailTVResponse.firstAirDate,
+                    detailTVResponse.overview,
+                    detailTVResponse.genres
                 )
                 viewModel.addFavTV(favTV)
             }
@@ -256,26 +253,26 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun bindDetailMovie(movie: DetailMovie) {
-        detailMovie = movie
-        binding.posterImage.loadImageFromURL(movie.posterPath)
-        binding.toolbarLayout.coverImage.loadImageFromURL(movie.backdropPath)
-        binding.movieTitle.text = movie.title
-        binding.releaseDate.text = movie.releaseDate.formatToMMMddyyyy("yyy-MM-dd")
-        binding.txtDesc.text = movie.overview
-        binding.listProduction.adapter = GenreAdapter(movie.genres)
+    private fun bindDetailMovie(movieResponse: DetailPopularMovie) {
+        detailMovieResponse = movieResponse
+        binding.posterImage.loadImageFromURL(movieResponse.posterPath)
+        binding.toolbarLayout.coverImage.loadImageFromURL(movieResponse.backdropPath)
+        binding.movieTitle.text = movieResponse.originalTitle
+        binding.releaseDate.text = movieResponse.releaseDate.formatToMMMddyyyy("yyy-MM-dd")
+        binding.txtDesc.text = movieResponse.overview
+        binding.listProduction.adapter = GenreAdapter(movieResponse.genres)
 
         changeShareIntent(shareData())
     }
 
-    private fun bindDetailTV(tvSeries: DetailTVSeries) {
-        detailTV = tvSeries
-        binding.posterImage.loadImageFromURL(tvSeries.posterPath)
-        binding.toolbarLayout.coverImage.loadImageFromURL(tvSeries.backdropPath)
-        binding.movieTitle.text = tvSeries.name
-        binding.releaseDate.text = tvSeries.firstAirDate.formatToMMMddyyyy("yyy-MM-dd")
-        binding.txtDesc.text = tvSeries.overview
-        binding.listProduction.adapter = GenreAdapter(tvSeries.genres)
+    private fun bindDetailTV(tvSeriesResponse: DetailPopularTVSeries) {
+        detailTVResponse = tvSeriesResponse
+        binding.posterImage.loadImageFromURL(tvSeriesResponse.posterPath)
+        binding.toolbarLayout.coverImage.loadImageFromURL(tvSeriesResponse.backdropPath)
+        binding.movieTitle.text = tvSeriesResponse.originalName
+        binding.releaseDate.text = tvSeriesResponse.firstAirDate.formatToMMMddyyyy("yyy-MM-dd")
+        binding.txtDesc.text = tvSeriesResponse.overview
+        binding.listProduction.adapter = GenreAdapter(tvSeriesResponse.genres)
 
         changeShareIntent(shareData())
     }
@@ -307,22 +304,22 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun bindFavoriteMovie(movie: FavoriteMovies) {
+    private fun bindFavoriteMovie(movie: DetailPopularMovie) {
         favMovie = movie
-        binding.posterImage.loadImageFromURL(movie.poster_path)
-        binding.toolbarLayout.coverImage.loadImageFromURL(movie.backdrop_path)
-        binding.movieTitle.text = movie.original_title
-        binding.releaseDate.text = movie.release_date.formatToMMMddyyyy("yyy-MM-dd")
+        binding.posterImage.loadImageFromURL(movie.posterPath)
+        binding.toolbarLayout.coverImage.loadImageFromURL(movie.backdropPath)
+        binding.movieTitle.text = movie.originalTitle
+        binding.releaseDate.text = movie.releaseDate.formatToMMMddyyyy("yyy-MM-dd")
         binding.txtDesc.text = movie.overview
         binding.listProduction.adapter = GenreAdapter(movie.genres)
 
         changeShareIntent(shareData())
     }
 
-    private fun bindFavoriteTV(movie: FavoriteTVSeries) {
+    private fun bindFavoriteTV(movie: DetailPopularTVSeries) {
         favTV = movie
-        binding.posterImage.loadImageFromURL(movie.poster_path)
-        binding.toolbarLayout.coverImage.loadImageFromURL(movie.backdrop_path)
+        binding.posterImage.loadImageFromURL(movie.posterPath)
+        binding.toolbarLayout.coverImage.loadImageFromURL(movie.backdropPath)
         binding.movieTitle.text = movie.originalName
         binding.releaseDate.text = movie.firstAirDate.formatToMMMddyyyy("yyy-MM-dd")
         binding.txtDesc.text = movie.overview
@@ -338,26 +335,26 @@ class DetailActivity : AppCompatActivity(), CoroutineScope {
             if (drawable != null) {
                 drawable.mutate()
                 drawable.setColorFilter(ContextCompat.getColor(this, R.color.yellow_600))
-                btnFavorite.setImageDrawable(drawable)
+                binding.btnFavorite.setImageDrawable(drawable)
             }
         } else {
             val drawable = ContextCompat.getDrawable(this, R.drawable.ic_baseline_bookmarks_24)
             if (drawable != null) {
                 drawable.mutate()
                 drawable.setColorFilter(ContextCompat.getColor(this, R.color.white))
-                btnFavorite.setImageDrawable(drawable)
+                binding.btnFavorite.setImageDrawable(drawable)
             }
         }
     }
 
     private fun shareData(): Intent? {
-        if (::detailMovie.isInitialized || ::detailTV.isInitialized) {
+        if (::detailMovieResponse.isInitialized || ::detailTVResponse.isInitialized) {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
             if (category == Constants.MOVIE)
-                shareIntent.putExtra(Intent.EXTRA_TEXT, detailMovie.overview)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, detailMovieResponse.overview)
             else
-                shareIntent.putExtra(Intent.EXTRA_TEXT, detailTV.overview)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, detailTVResponse.overview)
             return shareIntent
         }
 

@@ -4,41 +4,39 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.wildan.mymovieref.data.local.FavoriteMovies
-import com.wildan.mymovieref.data.local.FavoriteTVSeries
-import com.wildan.mymovieref.data.repository.LocalRepository
-import com.wildan.mymovieref.data.repository.RemoteRepository
-import com.wildan.mymovieref.utils.Constants
-import com.wildan.mymovieref.utils.Resource
-import com.wildan.mymovieref.utils.errorLog
+import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
+import com.wildan.mymovieref.core.domain.model.DetailPopularTVSeries
+import com.wildan.mymovieref.core.domain.usecase.PopularUseCase
+import com.wildan.mymovieref.core.utils.Constants
+import com.wildan.mymovieref.core.utils.Resource
+import com.wildan.mymovieref.core.utils.errorLog
 import kotlinx.coroutines.Dispatchers
 
 class DetailMovieViewModel @ViewModelInject constructor(
-    private val remoteRepository: RemoteRepository,
-    private val localRepository: LocalRepository
+    private val repository: PopularUseCase
 ) :
     ViewModel() {
 
-    suspend fun addFavMovie(favoriteMovies: FavoriteMovies) =
-        localRepository.addFavMovie(favoriteMovies)
+    suspend fun addFavMovie(favoriteMovies: DetailPopularMovie) =
+        repository.addFavMovie(favoriteMovies)
 
-    suspend fun addFavTV(favoriteTVSeries: FavoriteTVSeries) =
-        localRepository.addFavSeries(favoriteTVSeries)
+    suspend fun addFavTV(favoriteTVSeries: DetailPopularTVSeries) =
+        repository.addFavSeries(favoriteTVSeries)
 
-    suspend fun deleteFavMovie(favoriteMovies: FavoriteMovies) =
-        localRepository.deleteFavMovie(favoriteMovies)
+    suspend fun deleteFavMovie(favoriteMovies: DetailPopularMovie) =
+        repository.deleteFavMovie(favoriteMovies)
 
-    suspend fun deleteFavTV(favoriteTVSeries: FavoriteTVSeries) =
-        localRepository.deleteFavSeries(favoriteTVSeries)
+    suspend fun deleteFavTV(favoriteTVSeries: DetailPopularTVSeries) =
+        repository.deleteFavSeries(favoriteTVSeries)
 
-    fun checkFavMovie(movieId: Int) = localRepository.isInFavMovie(movieId)
+    fun checkFavMovie(movieId: Int) = repository.isInFavMovie(movieId)
 
-    fun checkFavTV(tvID: Int) = localRepository.isInFavSeries(tvID)
+    fun checkFavTV(tvID: Int) = repository.isInFavSeries(tvID)
 
     fun getDetailMovie(movieId: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         when (val data =
-            remoteRepository.getDetailMovie(
+            repository.getDetailMovie(
                 movieId
             )) {
             is NetworkResponse.Success -> {
@@ -78,7 +76,7 @@ class DetailMovieViewModel @ViewModelInject constructor(
     fun getDetailTV(tvID: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         when (val data =
-            remoteRepository.getDetailTVSeries(
+            repository.getDetailTVSeries(
                 tvID
             )) {
             is NetworkResponse.Success -> {

@@ -19,4 +19,5 @@
     <string name="favorite_button">favorite button</string>
     <string name="belum_ada_data_coba_tambahkan_movie_favorite_anda_terlebih_dahulu">Belum ada data ! coba tambahkan movie favorite anda terlebih dahulu !</string>
     <string name="belum_ada_data_coba_tambahkan_tv_favorite_anda_terlebih_dahulu">Belum ada data ! coba tambahkan tv favorite anda terlebih dahulu !</string>
+    <string name="title_favorite">Favorite</string>
 </resources>

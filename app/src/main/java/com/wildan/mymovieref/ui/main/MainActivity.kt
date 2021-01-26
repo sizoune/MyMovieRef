@@ -1,6 +1,7 @@
 package com.wildan.mymovieref.ui.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.wildan.mymovieref.R
@@ -27,8 +28,10 @@ class MainActivity : AppCompatActivity() {
             inflateMenu(R.menu.toolbar_favorite)
             setOnMenuItemClickListener {
                 if (it.itemId == R.id.myFav) {
-                    val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
-                    startActivity(intent)
+//                    val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
+//                    startActivity(intent)
+                    val uri = Uri.parse("mymovieref://favorite")
+                    startActivity(Intent(Intent.ACTION_VIEW, uri))
                 }
                 true
             }
