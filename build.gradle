@@ -6,6 +6,8 @@ buildscript {
         kotlin_version = "1.4.21"
         lifecycle_version = "2.2.0"
         room_version = "2.2.6"
+        //koin
+        koin_version = "2.1.6"
         // dagger hilt
         hilt_jetpack_version = '1.0.0-alpha02'
         hilt_version = '2.28-alpha'

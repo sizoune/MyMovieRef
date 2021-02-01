@@ -1,6 +1,5 @@
 package com.wildan.mymovieref.core.utils
 
-import androidx.paging.DataSource
 import com.wildan.mymovieref.core.data.local.FavoriteMoviesEntity
 import com.wildan.mymovieref.core.data.local.FavoriteTVSeriesEntity
 import com.wildan.mymovieref.core.data.model.*
@@ -92,12 +91,12 @@ object DataMapper {
             genres = mapGenresDomainToFavorite(input.genres)
         )
 
-    fun mapDetailMovieFavoriteToDomain(input: DataSource.Factory<Int, FavoriteMoviesEntity>): DataSource.Factory<Int, DetailPopularMovie> =
+    fun mapDetailMovieFavoriteToDomain(input: List<FavoriteMoviesEntity>): List<DetailPopularMovie?> =
         input.map {
             mapDetailMoviesFavoriteToDomain(it)
         }
 
-    fun mapDetailTVFavoriteToDomain(input: DataSource.Factory<Int, FavoriteTVSeriesEntity>): DataSource.Factory<Int, DetailPopularTVSeries> =
+    fun mapDetailTVFavoriteToDomain(input: List<FavoriteTVSeriesEntity>): List<DetailPopularTVSeries?> =
         input.map {
             mapDetailSeriesFavoriteToDomain(it)
         }

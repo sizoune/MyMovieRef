@@ -15,15 +15,14 @@ private val TAB_TITLES = arrayOf(
 
 @Suppress("DEPRECATION")
 class SectionsPagerAdapter(
-    private val context: Context, fm: FragmentManager,
-    private val isFavorite: Boolean
+    private val context: Context, fm: FragmentManager
 ) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> MovieFragment.newInstance(isFavorite)
-            else -> TVSeriesFragment.newInstance(isFavorite)
+            0 -> MovieFragment()
+            else -> TVSeriesFragment()
         }
     }
 

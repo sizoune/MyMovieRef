@@ -1,12 +1,9 @@
 package com.wildan.mymovieref.core.ui
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -17,8 +14,9 @@ import com.wildan.mymovieref.core.domain.model.DetailPopularTVSeries
 import com.wildan.mymovieref.core.utils.Constants
 
 class FavoriteTVAdapter(
+    private val movies: List<DetailPopularTVSeries>,
     private val clickListener: (Int) -> Unit
-) : PagedListAdapter<DetailPopularTVSeries, FavoriteTVAdapter.MovieHolder>(DIFF_CALLBACK) {
+) : RecyclerView.Adapter<FavoriteTVAdapter.MovieHolder>() {
 
     class MovieHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
         fun bindItemtoView(
@@ -58,26 +56,8 @@ class FavoriteTVAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        getItem(position)?.let { holder.bindItemtoView(it, clickListener) }
+        holder.bindItemtoView(movies[position], clickListener)
     }
 
-    companion object {
-        private val DIFF_CALLBACK: DiffUtil.ItemCallback<DetailPopularTVSeries> =
-            object : DiffUtil.ItemCallback<DetailPopularTVSeries>() {
-                override fun areItemsTheSame(
-                    oldFav: DetailPopularTVSeries,
-                    newFav: DetailPopularTVSeries
-                ): Boolean {
-                    return oldFav.id == newFav.id
-                }
-
-                @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(
-                    oldFav: DetailPopularTVSeries,
-                    newFav: DetailPopularTVSeries
-                ): Boolean {
-                    return oldFav == newFav
-                }
-            }
-    }
+    override fun getItemCount(): Int = movies.size
 }

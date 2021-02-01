@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.content.ContextCompat
@@ -16,23 +15,22 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wildan.mymovieref.R
-import com.wildan.mymovieref.databinding.ActivityDetailBinding
 import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
 import com.wildan.mymovieref.core.domain.model.DetailPopularTVSeries
 import com.wildan.mymovieref.core.ui.GenreAdapter
-import com.wildan.mymovieref.ui.detail.viewmodel.DetailMovieViewModel
 import com.wildan.mymovieref.core.utils.*
-import dagger.hilt.android.AndroidEntryPoint
+import com.wildan.mymovieref.databinding.ActivityDetailBinding
+import com.wildan.mymovieref.ui.detail.viewmodel.DetailMovieViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.coroutines.CoroutineContext
 
-@AndroidEntryPoint
 class DetailActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var binding: ActivityDetailBinding
-    private val viewModel: DetailMovieViewModel by viewModels()
+    private val viewModel: DetailMovieViewModel by viewModel()
     private lateinit var detailMovieResponse: DetailPopularMovie
     private lateinit var detailTVResponse: DetailPopularTVSeries
     private lateinit var favMovie: DetailPopularMovie

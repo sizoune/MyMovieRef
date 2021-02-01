@@ -1,11 +1,11 @@
 package com.wildan.mymovieref.favorite.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.wildan.mymovieref.R
-import com.wildan.mymovieref.favorite.ui.adapter.ViewPagerAdapter
 import com.wildan.mymovieref.favorite.databinding.ActivityFavoriteBinding
+import com.wildan.mymovieref.favorite.ui.adapter.ViewPagerAdapter
 
 class FavoriteActivity : AppCompatActivity() {
 

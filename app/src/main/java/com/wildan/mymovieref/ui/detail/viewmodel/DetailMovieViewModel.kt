@@ -1,7 +1,7 @@
 package com.wildan.mymovieref.ui.detail.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
@@ -11,8 +11,9 @@ import com.wildan.mymovieref.core.utils.Constants
 import com.wildan.mymovieref.core.utils.Resource
 import com.wildan.mymovieref.core.utils.errorLog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 
-class DetailMovieViewModel @ViewModelInject constructor(
+class DetailMovieViewModel constructor(
     private val repository: PopularUseCase
 ) :
     ViewModel() {
@@ -29,86 +30,88 @@ class DetailMovieViewModel @ViewModelInject constructor(
     suspend fun deleteFavTV(favoriteTVSeries: DetailPopularTVSeries) =
         repository.deleteFavSeries(favoriteTVSeries)
 
-    fun checkFavMovie(movieId: Int) = repository.isInFavMovie(movieId)
+    fun checkFavMovie(movieId: Int) = repository.isInFavMovie(movieId).asLiveData()
 
-    fun checkFavTV(tvID: Int) = repository.isInFavSeries(tvID)
+    fun checkFavTV(tvID: Int) = repository.isInFavSeries(tvID).asLiveData()
 
     fun getDetailMovie(movieId: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
-        when (val data =
-            repository.getDetailMovie(
-                movieId
-            )) {
-            is NetworkResponse.Success -> {
-                emit(Resource.success(data = data.body))
-            }
-            is NetworkResponse.ServerError -> {
-                data.body?.statusMessage?.let { "errorServer".errorLog(it) }
-                emit(
-                    Resource.errorServer(
-                        data = null,
-                        message = data.body?.statusMessage
-                            ?: Constants.DEFAULT_SERVER_ERROR_MESSAGE
+        repository.getDetailMovie(
+            movieId
+        ).collect { data ->
+            when (data) {
+                is NetworkResponse.Success -> {
+                    emit(Resource.success(data = data.body))
+                }
+                is NetworkResponse.ServerError -> {
+                    data.body?.statusMessage?.let { "errorServer".errorLog(it) }
+                    emit(
+                        Resource.errorServer(
+                            data = null,
+                            message = data.body?.statusMessage
+                                ?: Constants.DEFAULT_SERVER_ERROR_MESSAGE
+                        )
                     )
-                )
-            }
-            is NetworkResponse.NetworkError -> {
-                data.error.localizedMessage?.let { "NetworkError".errorLog(it) }
-                emit(
-                    Resource.errorNetwork(
-                        data = null,
-                        message = Constants.DEFAULT_NETWORK_ERROR_MESSAGE
+                }
+                is NetworkResponse.NetworkError -> {
+                    data.error.localizedMessage?.let { "NetworkError".errorLog(it) }
+                    emit(
+                        Resource.errorNetwork(
+                            data = null,
+                            message = Constants.DEFAULT_NETWORK_ERROR_MESSAGE
+                        )
                     )
-                )
-            }
-            is NetworkResponse.UnknownError -> {
-                data.error.localizedMessage?.let { "UnknownError".errorLog(it) }
-                emit(
-                    Resource.errorUnknown(
-                        data = null,
-                        message = Constants.DEFAULT_UNKNOWN_ERROR_MESSAGE
+                }
+                is NetworkResponse.UnknownError -> {
+                    data.error.localizedMessage?.let { "UnknownError".errorLog(it) }
+                    emit(
+                        Resource.errorUnknown(
+                            data = null,
+                            message = Constants.DEFAULT_UNKNOWN_ERROR_MESSAGE
+                        )
                     )
-                )
+                }
             }
         }
     }
 
     fun getDetailTV(tvID: Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
-        when (val data =
-            repository.getDetailTVSeries(
-                tvID
-            )) {
-            is NetworkResponse.Success -> {
-                emit(Resource.success(data = data.body))
-            }
-            is NetworkResponse.ServerError -> {
-                data.body?.statusMessage?.let { "errorServer".errorLog(it) }
-                emit(
-                    Resource.errorServer(
-                        data = null,
-                        message = data.body?.statusMessage
-                            ?: Constants.DEFAULT_SERVER_ERROR_MESSAGE
+        repository.getDetailTVSeries(
+            tvID
+        ).collect { data ->
+            when (data) {
+                is NetworkResponse.Success -> {
+                    emit(Resource.success(data = data.body))
+                }
+                is NetworkResponse.ServerError -> {
+                    data.body?.statusMessage?.let { "errorServer".errorLog(it) }
+                    emit(
+                        Resource.errorServer(
+                            data = null,
+                            message = data.body?.statusMessage
+                                ?: Constants.DEFAULT_SERVER_ERROR_MESSAGE
+                        )
                     )
-                )
-            }
-            is NetworkResponse.NetworkError -> {
-                data.error.localizedMessage?.let { "NetworkError".errorLog(it) }
-                emit(
-                    Resource.errorNetwork(
-                        data = null,
-                        message = Constants.DEFAULT_NETWORK_ERROR_MESSAGE
+                }
+                is NetworkResponse.NetworkError -> {
+                    data.error.localizedMessage?.let { "NetworkError".errorLog(it) }
+                    emit(
+                        Resource.errorNetwork(
+                            data = null,
+                            message = Constants.DEFAULT_NETWORK_ERROR_MESSAGE
+                        )
                     )
-                )
-            }
-            is NetworkResponse.UnknownError -> {
-                data.error.localizedMessage?.let { "UnknownError".errorLog(it) }
-                emit(
-                    Resource.errorUnknown(
-                        data = null,
-                        message = Constants.DEFAULT_UNKNOWN_ERROR_MESSAGE
+                }
+                is NetworkResponse.UnknownError -> {
+                    data.error.localizedMessage?.let { "UnknownError".errorLog(it) }
+                    emit(
+                        Resource.errorUnknown(
+                            data = null,
+                            message = Constants.DEFAULT_UNKNOWN_ERROR_MESSAGE
+                        )
                     )
-                )
+                }
             }
         }
     }

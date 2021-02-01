@@ -1,8 +1,7 @@
 package com.wildan.mymovieref.core.data.local
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDao {
@@ -20,14 +19,14 @@ interface FavoriteDao {
     suspend fun deleteTV(favTV: FavoriteTVSeriesEntity)
 
     @Query("SELECT * from FavoriteMoviesEntity")
-    fun getFavMovies(): DataSource.Factory<Int, FavoriteMoviesEntity>
+    fun getFavMovies(): Flow<List<FavoriteMoviesEntity>>
 
     @Query("SELECT * from FavoriteTVSeriesEntity")
-    fun getFavSeries(): DataSource.Factory<Int, FavoriteTVSeriesEntity>
+    fun getFavSeries(): Flow<List<FavoriteTVSeriesEntity>>
 
     @Query("SELECT * from FavoriteMoviesEntity WHERE id=:movieID")
-    fun isInFavMovie(movieID: Int): LiveData<FavoriteMoviesEntity>
+    fun isInFavMovie(movieID: Int): Flow<FavoriteMoviesEntity>
 
     @Query("SELECT * from FavoriteTVSeriesEntity WHERE id=:tvID")
-    fun isInFavSeries(tvID: Int): LiveData<FavoriteTVSeriesEntity>
+    fun isInFavSeries(tvID: Int): Flow<FavoriteTVSeriesEntity>
 }

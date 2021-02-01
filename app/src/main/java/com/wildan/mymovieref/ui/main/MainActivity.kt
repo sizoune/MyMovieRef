@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.wildan.mymovieref.R
 import com.wildan.mymovieref.databinding.ActivityMainBinding
 import com.wildan.mymovieref.ui.main.adapter.SectionsPagerAdapter
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -28,8 +26,6 @@ class MainActivity : AppCompatActivity() {
             inflateMenu(R.menu.toolbar_favorite)
             setOnMenuItemClickListener {
                 if (it.itemId == R.id.myFav) {
-//                    val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
-//                    startActivity(intent)
                     val uri = Uri.parse("mymovieref://favorite")
                     startActivity(Intent(Intent.ACTION_VIEW, uri))
                 }
@@ -37,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, false)
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
