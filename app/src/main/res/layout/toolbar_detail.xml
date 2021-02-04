@@ -29,7 +29,7 @@
             android:id="@+id/overlayColor"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:background="@color/overlay_dark_30" />
+            android:background="@color/overlay_light_50" />
 
         <ProgressBar
             android:id="@+id/progressBar"

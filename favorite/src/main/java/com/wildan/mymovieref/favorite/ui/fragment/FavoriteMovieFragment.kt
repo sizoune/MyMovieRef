@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.wildan.mymovieref.core.domain.model.DetailPopularMovie
 import com.wildan.mymovieref.core.ui.FavoriteMovieAdapter
-import com.wildan.mymovieref.core.utils.*
+import com.wildan.mymovieref.core.utils.Constants
+import com.wildan.mymovieref.core.utils.ListSpacingDecoration
+import com.wildan.mymovieref.core.utils.hide
+import com.wildan.mymovieref.core.utils.show
 import com.wildan.mymovieref.favorite.databinding.FragmentFavoriteMovieBinding
 import com.wildan.mymovieref.favorite.di.FavoriteModule.favoriteViewModelModule
 import com.wildan.mymovieref.favorite.ui.FavoriteViewModel
