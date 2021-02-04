@@ -13,10 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovieRef">
         <activity
-            android:name=".ui.main.FavoriteActivity"
-            android:theme="@style/Theme.MyMovieRef.NoActionBar"
-            android:parentActivityName=".ui.main.MainActivity" />
-        <activity
             android:name=".ui.detail.DetailActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/Theme.MyMovieRef.NoActionBar" />
