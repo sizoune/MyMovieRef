@@ -70,7 +70,7 @@ class FavoriteSeriesFragment : Fragment() {
         adapterFavorite = FavoriteTVAdapter(data) {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(Constants.DATA, it)
-            intent.putExtra(Constants.CATEGORY, Constants.MOVIE)
+            intent.putExtra(Constants.CATEGORY, Constants.TV_SERIES)
             startActivity(intent)
         }
         binding.listTV.apply {
